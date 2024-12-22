@@ -112,10 +112,10 @@ def calculate_llm_cost(characters, input_price_per_1M_tokens=2.50, output_price_
 def print_llm_response(prompt):
     """
     This function takes a prompt as input, which must be a string enclosed in quotation marks,
-    and passes it to OpenAI’s GPT-4 model. The function then prints the response of the model.
+    and passes it to OpenAI’s GPT-4o-mini model. The function then prints the response of the model.
     
     Args:
-        prompt (str): The input prompt to be sent to the GPT-4 model.
+        prompt (str): The input prompt to be sent to the GPT-4o-mini model.
     
     Raises:
         ValueError: If the input prompt is not a string.
@@ -127,7 +127,7 @@ def print_llm_response(prompt):
         
         # Create a completion request to the GPT-4 model
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
@@ -150,17 +150,17 @@ def print_llm_response(prompt):
 def get_llm_response(prompt):
     """
     This function takes a prompt as input, which must be a string enclosed in quotation marks,
-    and passes it to OpenAI’s GPT-4 model. The function then returns the response of the model as a string.
+    and passes it to OpenAI’s GPT-4o-mini model. The function then returns the response of the model as a string.
     
     Args:
-        prompt (str): The input prompt to be sent to the GPT-4 model.
+        prompt (str): The input prompt to be sent to the GPT-4o-mini model.
     
     Returns:
-        str: The response from the GPT-4 model.
+        str: The response from the GPT-4o-mini model.
     """
-    # Create a completion request to the GPT-4 model
+    # Create a completion request to the GPT-4o-mini model
     completion = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -178,7 +178,7 @@ def get_chat_completion(prompt, history):
     history_string = "\n\n".join(["\n".join(turn) for turn in history])
     prompt_with_history = f"{history_string}\n\n{prompt}"
     completion = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -193,7 +193,7 @@ def get_chat_completion(prompt, history):
 
 def open_chatbot():
     """
-    This function opens a Gradio chatbot window that is connected to OpenAI's GPT-4 model.
+    This function opens a Gradio chatbot window that is connected to OpenAI's GPT-4o-mini model.
     """
     gr.close_all()
     gr.ChatInterface(fn=get_chat_completion).launch(quiet=True)

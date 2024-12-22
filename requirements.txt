@@ -6,3 +6,5 @@ gradio
 requests
 pandas
 folium
+streamlit
+gradio_client
