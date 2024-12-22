@@ -2,6 +2,8 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import csv
+from IPython.display import display, HTML  # Import HTML
+
 
 # Load environment variables from a .env file
 load_dotenv('.env', override=True)
@@ -162,3 +164,24 @@ def list_files_in_directory(directory_path):
         print(f"Error: The directory {directory_path} was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def download_file(file_name):
+    """
+    Generates an HTML button to download the specified file.
+    
+    Args:
+        file_name (str): The name of the file to be downloaded.
+    
+    Returns:
+        None
+    """
+    html = f"""
+    <html>
+    <body>
+    <a href="{file_name}" download="{file_name}">
+        <button>Click here to download your file</button>
+    </a>
+    </body>
+    </html>
+    """
+    display(HTML(html))
