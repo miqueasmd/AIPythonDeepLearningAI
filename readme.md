@@ -32,6 +32,7 @@ This project demonstrates how to use OpenAI's GPT-4o to automate tasks such as e
    - Add your OpenAI API key to the `.env` file:
      ```plaintext
      OPENAI_API_KEY=your_openai_api_key_here
+     BASE_PATH=your_base_path_here
      ```
 
 ## Usage

@@ -125,3 +125,40 @@ def format_response_to_html(response):
     </html>
     """
     return html_content
+
+def upload_txt_file(file_path):
+    """
+    Uploads a text file and returns its content as a string.
+    
+    Args:
+        file_path (str): The path to the text file.
+    
+    Returns:
+        str: The content of the text file.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+        return content
+    except FileNotFoundError:
+        print(f"Error: The file {file_path} was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def list_files_in_directory(directory_path):
+    """
+    Lists all files in a given directory.
+    
+    Args:
+        directory_path (str): The path to the directory.
+    
+    Returns:
+        list: A list of file names in the directory.
+    """
+    try:
+        files = os.listdir(directory_path)
+        return files
+    except FileNotFoundError:
+        print(f"Error: The directory {directory_path} was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
