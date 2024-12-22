@@ -185,3 +185,32 @@ def download_file(file_name):
     </html>
     """
     display(HTML(html))
+
+def display_table(data):
+    """
+    Displays a list of dictionaries as an HTML table.
+    
+    Args:
+        data (list): A list of dictionaries representing the table data.
+    
+    Returns:
+        None
+    """
+    if not data:
+        print("No data to display.")
+        return
+    
+    # Extract headers from the first dictionary
+    headers = data[0].keys()
+    
+    # Create the HTML table
+    html = "<table border='1'>"
+    html += "<tr>" + "".join(f"<th>{header}</th>" for header in headers) + "</tr>"
+    
+    for row in data:
+        html += "<tr>" + "".join(f"<td>{row[header]}</td>" for header in headers) + "</tr>"
+    
+    html += "</table>"
+    
+    # Display the HTML table
+    display(HTML(html))

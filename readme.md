@@ -50,3 +50,9 @@ If you find this project helpful, consider supporting me on Ko-fi:
 Your contributions will help cover fees and materials for my **Computer Science and Engineering studies at UoPeople** starting in September 2025.
 
 <a href="https://ko-fi.com/miqueasmd"><img src="https://ko-fi.com/img/githubbutton_sm.svg" /></a>
+
+## Acknowledgements
+
+This project is inspired by the DeepLearning.AI courses. Please visit [DeepLearning.AI](https://www.deeplearning.ai/) for more information and resources.
+
+
