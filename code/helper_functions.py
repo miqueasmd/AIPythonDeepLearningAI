@@ -2,7 +2,14 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import csv
+import pandas as pd  # Import pandas 
 from IPython.display import display, HTML  # Import HTML
+import ipywidgets as widgets  # Import ipywidgets
+import random
+import gradio as gr
+import requests
+import json
+import folium
 
 
 # Load environment variables from a .env file
@@ -11,12 +18,96 @@ load_dotenv('.env', override=True)
 # Retrieve the OpenAI API key from environment variables
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
+# Retrieve the base path from environment variables
+base_path = os.getenv('BASE_PATH')
+
 # Check if the API key is available
 if not openai_api_key:
     raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")
 
 # Initialize the OpenAI client with the API key
 client = OpenAI(api_key=openai_api_key)
+
+def read_csv(file_path):
+    """
+    Reads a CSV file and returns its contents as a pandas DataFrame.
+    
+    Args:
+        file_path (str): The path to the CSV file.
+    
+    Returns:
+        pd.DataFrame: The contents of the CSV file as a DataFrame.
+    """
+    return pd.read_csv(file_path)
+
+def get_dog_age(human_age):
+    """This function takes one parameter: a person's age as an integer and returns their age if
+    they were a dog, which is their age divided by 7. """
+    return human_age / 7
+
+def get_goldfish_age(human_age):
+    """This function takes one parameter: a person's age as an integer and returns their age if
+    they were a dog, which is their age divided by 5. """
+    return human_age / 5
+
+def get_cat_age(human_age):
+    if human_age <= 14:
+        # For the first 14 human years, we consider the age as if it's within the first two cat years.
+        cat_age = human_age / 7
+    else:
+        # For human ages beyond 14 years:
+        cat_age = 2 + (human_age - 14) / 4
+    return cat_age
+
+def get_random_ingredient():
+    """
+    Returns a random ingredient from a list of 20 smoothie ingredients.
+    
+    The ingredients are a bit wacky but not gross, making for an interesting smoothie combination.
+    
+    Returns:
+        str: A randomly selected smoothie ingredient.
+    """
+    ingredients = [
+        "rainbow kale", "glitter berries", "unicorn tears", "coconut", "starlight honey",
+        "lunar lemon", "blueberries", "mermaid mint", "dragon fruit", "pixie dust",
+        "butterfly pea flower", "phoenix feather", "chocolate protein powder", "grapes", "hot peppers",
+        "fairy floss", "avocado", "wizard's beard", "pineapple", "rosemary"
+    ]
+    
+    return random.choice(ingredients)
+
+def get_random_number(x, y):
+    """
+        Returns a random integer between x and y, inclusive.
+        
+        Args:
+            x (int): The lower bound (inclusive) of the random number range.
+            y (int): The upper bound (inclusive) of the random number range.
+        
+        Returns:
+            int: A randomly generated integer between x and y, inclusive.
+
+        """
+    return random.randint(x, y)
+
+def calculate_llm_cost(characters, input_price_per_1M_tokens=2.50, output_price_per_1M_tokens=10.00):
+    """
+    Calculate the cost of using the LLM based on the number of characters and the price per 1M tokens.
+
+    Args:
+        characters (int): The number of characters in the input.
+        input_price_per_1M_tokens (float): The price per 1M input tokens. Default is 2.50.
+        output_price_per_1M_tokens (float): The price per 1M output tokens. Default is 10.00.
+
+    Returns:
+        str: The cost formatted as a string with 4 decimal places.
+    """
+    tokens = characters / 4  # Assuming 1 token is approximately 4 characters
+    input_cost = (tokens / 1_000_000) * input_price_per_1M_tokens
+    output_cost = (tokens / 1_000_000) * output_price_per_1M_tokens
+    total_cost = input_cost + output_cost
+    return f"${total_cost:.4f}"
 
 def print_llm_response(prompt):
     """
@@ -83,6 +174,30 @@ def get_llm_response(prompt):
     response = completion.choices[0].message.content
     return response
 
+def get_chat_completion(prompt, history):
+    history_string = "\n\n".join(["\n".join(turn) for turn in history])
+    prompt_with_history = f"{history_string}\n\n{prompt}"
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a helpful but terse AI assistant who gets straight to the point.",
+            },
+            {"role": "user", "content": prompt_with_history},
+        ],
+        temperature=0.0,
+    )
+    response = completion.choices[0].message.content
+    return response
+
+def open_chatbot():
+    """
+    This function opens a Gradio chatbot window that is connected to OpenAI's GPT-4 model.
+    """
+    gr.close_all()
+    gr.ChatInterface(fn=get_chat_completion).launch(quiet=True)
+
 def read_journal(file_path):
     """
     Reads the content of a journal file and returns it as a string.
@@ -146,6 +261,46 @@ def upload_txt_file(file_path):
         print(f"Error: The file {file_path} was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def upload_txt_file_widget():
+    """
+    Uploads a text file and saves it to the specified directory.
+    
+    Args:
+        directory (str): The directory where the uploaded file will be saved. 
+        Defaults to the current working directory.
+    """
+    # Create the file upload widget
+    upload_widget = widgets.FileUpload(
+        accept='.txt',  # Accept text files only
+        multiple=False  # Do not allow multiple uploads
+    )
+    # Impose file size limit
+    output = widgets.Output()
+    
+    # Function to handle file upload
+    def handle_upload(change):
+        with output:
+            output.clear_output()
+            # Read the file content
+            content = upload_widget.value[0]['content']
+            name = upload_widget.value[0]['name']
+            size_in_kb = len(content) / 1024
+            
+            if size_in_kb > 3:
+                print(f"Your file is too large, please upload a file that doesn't exceed 3KB.")
+                return
+		    
+            # Save the file to the specified directory
+            with open(name, 'wb') as f:
+                f.write(content)
+            # Confirm the file has been saved
+            print(f"The {name} file has been uploaded.")
+
+    # Attach the file upload event to the handler function
+    upload_widget.observe(handle_upload, names='value')
+
+    display(upload_widget, output)
 
 def list_files_in_directory(directory_path):
     """
@@ -214,3 +369,136 @@ def display_table(data):
     
     # Display the HTML table
     display(HTML(html))
+
+def read_csv_dict(csv_file_path):
+    """This function takes a csv file and loads it as a dict."""
+
+    # Initialize an empty list to store the data
+    data_list = []
+
+    # Open the CSV file
+    with open(csv_file_path, mode='r') as file:
+        # Create a CSV reader object
+        csv_reader = csv.DictReader(file)
+    
+        # Iterate over each row in the CSV file
+        for row in csv_reader:
+            # Append the row to the data list
+            data_list.append(row)
+
+    # Convert the list to a dictionary
+    data_dict = {i: data_list[i] for i in range(len(data_list))}
+    return data_dict
+
+def display_table_pd(data):
+    df = pd.DataFrame(data)
+
+    # Display the DataFrame as an HTML table
+    display(HTML(df.to_html(index=False)))
+
+def get_current_time():
+    now = dt.now()
+    return now.strftime("%m/%d/%Y, %H:%M:%S")
+
+def celsius_to_fahrenheit(celsius):
+    fahrenheit = celsius * 9 / 5 + 32 
+    print(f"{celsius}°C is equivalent to {fahrenheit:.2f}°F")
+
+def beautiful_barh(labels, values):
+	# Create the bar chart
+	plt.figure(figsize=(9, 5))
+	bars = plt.barh(labels, values, color = plt.cm.tab20.colors)
+
+	for bar in bars:
+		plt.text(bar.get_width()/2,   # X coordinate 
+			 bar.get_y() + bar.get_height()/2,  # Y coordinate 
+			 f'${bar.get_width() / 1e9:.1f}B',  # Text label 
+			 ha='center', va='center', color='w', fontsize=10, fontweight = "bold")
+			 
+	# Customizing the x-axis to display values in billions
+	def billions(x, pos):
+		"""The two args are the value and tick position"""
+		return f'${x * 1e-9:.1f}B'
+
+	formatter = FuncFormatter(billions)
+	plt.gca().xaxis.set_major_formatter(formatter)
+
+
+	# Inverting the y-axis to have the highest value on top
+	plt.gca().invert_yaxis()
+
+def display_map():
+    # Define the bounding box for the continental US
+    us_bounds = [[24.396308, -125.0], [49.384358, -66.93457]]
+    # Create the map centered on the US with limited zoom levels
+    m = folium.Map(
+	    location=[37.0902, -95.7129],  # Center the map on the geographic center of the US
+	    zoom_start=5,  # Starting zoom level
+	    min_zoom=4,  # Minimum zoom level
+	    max_zoom=10,
+	    max_bounds=True,
+	    control_scale=True  # Maximum zoom level
+	)
+
+    # Set the bounds to limit the map to the continental US
+    m.fit_bounds(us_bounds)
+    # Add a click event to capture the coordinates
+    m.add_child(folium.LatLngPopup())
+    title_html = '''
+	<div style="
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%; 
+	height: 50px; 
+	border:0px solid grey; 
+	z-index:9999; 
+	font-size:30px;
+	padding: 5px;
+	background-color:white;
+	text-align: center;
+	">
+	&nbsp;<b>Click to view coordinates</b>
+	</div>
+	'''
+	
+    m.get_root().html.add_child(folium.Element(title_html))
+
+    # Display the map
+    return m
+    
+def get_forecast(lat, lon):
+    url = f"https://api.weather.gov/points/{lat},{lon}"
+
+    # Make the request to get the grid points
+    response = requests.get(url)
+    data = response.json()
+    # Extract the forecast URL from the response
+    forecast_url = data['properties']['forecast']
+
+    # Make a request to the forecast URL for the selected location
+    forecast_response = requests.get(forecast_url)
+    forecast_data = forecast_response.json()
+    
+    daily_forecast = forecast_data['properties']['periods']
+    return daily_forecast
+
+def print_journal(file):
+    with open(file, "r") as f:
+        journal = f.read()
+    print(journal)
+
+def create_bullet_points(file):
+    # Read in the file and store the contents as a string
+    with open(file, "r") as f:
+        file_contents = f.read()
+
+    # Write a prompt and pass to an LLM
+    prompt = f"""Please summarize the following text into three bullet points:
+    
+    {file_contents}
+    """
+    bullets = get_llm_response(prompt)  # Pass the prompt to the LLM
+
+    # Return the bullet points
+    return bullets
