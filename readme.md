@@ -59,31 +59,29 @@ This structure facilitates easy access to data and code, promoting efficient wor
 
 ### Journal Analysis
 
-# Read and analyze a journal entry
-
-journal = read_journal("data/cape_town.txt")
-
-bullet_points = create_bullet_points(journal)
+- **Read and Analyze a Journal Entry**  
+  Analyze journal entries to extract meaningful insights:
+  ```python
+  journal = read_journal("data/cape_town.txt")
+  bullet_points = create_bullet_points(journal)
 
 ### Restaurant Data Processing
 
 # Extract restaurant information in CSV format
 
 restaurants_data = get_llm_response("""
-
     Please extract restaurants and specialties from the journal...
-    
 """)
+
 
 ### Itinerary Planning
 
 # Generate detailed itinerary
 
 itinerary = read_csv('data/itinerary.csv')
-
 for trip_stop in itinerary:
-
     city = trip_stop["City"]
+
 
 # Generate city-specific plans
 
