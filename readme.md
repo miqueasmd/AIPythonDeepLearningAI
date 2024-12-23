@@ -59,37 +59,16 @@ This structure facilitates easy access to data and code, promoting efficient wor
 
 ### Journal Analysis
 
-- **Read and Analyze a Journal Entry**  
-  Analyze journal entries to extract meaningful insights:
-  ```python
-  journal = read_journal("data/cape_town.txt")
-  bullet_points = create_bullet_points(journal)
-
 ### Restaurant Data Processing
-
-# Extract restaurant information in CSV format
-
-restaurants_data = get_llm_response("""
-    Please extract restaurants and specialties from the journal...
-""")
-
 
 ### Itinerary Planning
 
-# Generate detailed itinerary
+### Generate detailed itinerary
 
-itinerary = read_csv('data/itinerary.csv')
-for trip_stop in itinerary:
-    city = trip_stop["City"]
-
-
-# Generate city-specific plans
+### Generate city-specific plans
 
 ### API Usage Monitoring
 
-# Track API usage and costs
-
-display_usage_and_cost_for_period(api_key, days=10, monthly_limit=10.00)
 
 ## Usage Notes
 
