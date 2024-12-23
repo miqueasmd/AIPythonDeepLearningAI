@@ -67,9 +67,9 @@ This structure facilitates easy access to data and code, promoting efficient wor
 
 ### Restaurant Data Processing
 
-- **Extract Restaurant Information**
-
+### Extract Restaurant Information
 ```python
+# Extract restaurant information in CSV format
 restaurants_data = get_llm_response("""
     Please extract restaurants and specialties from the journal...
 """)
