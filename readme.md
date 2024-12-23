@@ -21,10 +21,9 @@ project/
 │ ├── journal_rio.txt
 │ ├── journal_sidney.txt
 │ └── .csv # Various restaurant and itinerary data files
-├── helper_functions.py # Core utility functions
-├── aisetup.py # AI configuration and authentication
-├── api_usage_monitor.py # OpenAI API usage tracking
-└── notebooks/ # Jupyter notebooks for analysis
+└── code/ # Jupyter notebooks for analysis
+   ├── helper_functions.py # Core utility functions
+   └── api_usage_monitor.py # OpenAI API usage tracking
 
 ## Setup
 
