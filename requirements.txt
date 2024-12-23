@@ -8,3 +8,4 @@ pandas
 folium
 streamlit
 gradio_client
+beautifulsoup4
