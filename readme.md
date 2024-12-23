@@ -1,19 +1,37 @@
 # Deep Learning Project: Automating Tasks with OpenAI's GPT-4o
 
-This project demonstrates how to use OpenAI's GPT-4o to automate tasks such as extracting information from a journal entry and formatting it into HTML for display in a Jupyter notebook.
+This project leverages OpenAI's GPT-4 to analyze travel journals, create itineraries, and process restaurant recommendations. It includes tools for managing API usage, processing various data formats, and generating formatted outputs.
+
+## Features
+
+- **Journal Analysis**: Extract key information from travel journals including restaurants, activities, and food specialties
+- **Smart Itinerary Planning**: Generate detailed daily itineraries based on dates and available restaurant data
+- **Data Processing**: Handle multiple file formats (CSV, TXT, HTML)
+- **API Usage Monitoring**: Track OpenAI API usage and costs
+- **Interactive Components**: Jupyter notebook integration with HTML display capabilities
+- **Weather Integration**: Fetch and analyze weather data for travel planning
+- **Utility Functions**: Temperature conversions, random selections, and data formatting tools
 
 ## Project Structure
 
-- `helper_functions.py`: Contains helper functions for reading journal entries, interacting with the GPT-4 model, and formatting responses into HTML.
-- `automating_tasks.ipynb`: Jupyter notebook that demonstrates the process of reading a journal entry, creating a prompt, getting a response from GPT-4, and displaying the formatted HTML response.
-- `data/`: Directory containing data files.
+project/
+├── data/ # Journal entries and restaurant data
+│ ├── cape_town.txt
+│ ├── journal_tokyo.txt
+│ ├── journal_rio.txt
+│ ├── journal_sidney.txt
+│ └── .csv # Various restaurant and itinerary data files
+├── helper_functions.py # Core utility functions
+├── aisetup.py # AI configuration and authentication
+├── api_usage_monitor.py # OpenAI API usage tracking
+└── notebooks/ # Jupyter notebooks for analysis
 
 ## Setup
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/miqueasmd/deep-learning-project.git
-   cd deep-learning-project
+   git clone https://github.com/miqueasmd/AIPythonDeepLearningAI.git
+   AIPythonDeepLearningAI
    ```
 
 2. **Create a virtual environment**:
@@ -35,14 +53,51 @@ This project demonstrates how to use OpenAI's GPT-4o to automate tasks such as e
      BASE_PATH=your_base_path_here
      ```
 
-## Usage
+## Core Functions
 
-1. **Run the Jupyter notebook**:
-   ```bash
-   jupyter notebook automating_tasks.ipynb
-   ```
+### Journal Analysis
 
-2. **Follow the steps in the notebook** to read the journal entry, create a prompt, get the response from GPT-4, and display the formatted HTML response.
+# Read and analyze a journal entry
+
+journal = read_journal("data/cape_town.txt")
+
+bullet_points = create_bullet_points(journal)
+
+### Restaurant Data Processing
+
+# Extract restaurant information in CSV format
+
+restaurants_data = get_llm_response("""
+
+    Please extract restaurants and specialties from the journal...
+    
+""")
+
+### Itinerary Planning
+
+# Generate detailed itinerary
+
+itinerary = read_csv('data/itinerary.csv')
+
+for trip_stop in itinerary:
+
+    city = trip_stop["City"]
+
+# Generate city-specific plans
+
+### API Usage Monitoring
+
+# Track API usage and costs
+
+display_usage_and_cost_for_period(api_key, days=10, monthly_limit=10.00)
+
+## Usage Notes
+
+1. **API Costs**: The project uses OpenAI's API which has associated costs. Monitor usage through the provided tools.
+2. **Rate Limits**: Includes retry mechanisms for API rate limits.
+3. **Data Storage**: Journal entries and restaurant data should be stored in the `/data` directory.
+4. **Interactive Features**: Many features are designed for Jupyter notebook integration.
+  
 
 ## ☕ Support Me
 
