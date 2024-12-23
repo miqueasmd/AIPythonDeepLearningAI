@@ -14,16 +14,19 @@ This project leverages OpenAI's GPT-4 to analyze travel journals, create itinera
 
 ## Project Structure
 
-project/
-├── data/ # Journal entries and restaurant data
-│ ├── cape_town.txt
-│ ├── journal_tokyo.txt
-│ ├── journal_rio.txt
-│ ├── journal_sidney.txt
-│ └── .csv # Various restaurant and itinerary data files
-└── code/ # Jupyter notebooks for analysis
-   ├── helper_functions.py # Core utility functions
-   └── api_usage_monitor.py # OpenAI API usage tracking
+This project is structured for clarity and maintainability. Let's explore the key folders:
+
+- **data/** (folder): Stores all the raw data used for analysis.
+    - **cape_town.txt** (file): Contains journal entries specifically for Cape Town.
+    - **journal_tokyo.txt** (file): Journal entries from your trip to Tokyo.
+    - **journal_rio.txt** (file): Similar file for Rio de Janeiro.
+    - **journal_sidney.txt** (file): Journal entries for Sydney.
+    - **.csvs**: Various data files in CSV format, likely containing restaurant details or itinerary information.
+- **code/** (folder): Houses Jupyter Notebooks for data analysis.
+    - **helper_functions.py** (file): Contains core functions used across notebooks for common tasks.
+    - **api_usage_monitor.py** (file): Tracks your OpenAI API usage, ensuring responsible use of the platform.
+
+This structure facilitates easy access to data and code, promoting efficient workflow and collaboration.
 
 ## Setup
 
