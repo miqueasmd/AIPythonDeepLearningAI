@@ -9,3 +9,4 @@ folium
 streamlit
 gradio_client
 beautifulsoup4
+aisetup
