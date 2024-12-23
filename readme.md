@@ -67,7 +67,7 @@ This structure facilitates easy access to data and code, promoting efficient wor
 
 ### Restaurant Data Processing
 
-**Extract Restaurant Information**
+- **Extract Restaurant Information**
 
 ```python
 restaurants_data = get_llm_response("""
