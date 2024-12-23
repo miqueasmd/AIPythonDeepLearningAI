@@ -57,17 +57,17 @@ This structure facilitates easy access to data and code, promoting efficient wor
 
 ## Core Functions
 
-### Journal Analysis
+# Journal Analysis
 
-### Restaurant Data Processing
+# Restaurant Data Processing
 
-### Itinerary Planning
+# Itinerary Planning
 
-### Generate detailed itinerary
+# Generate detailed itinerary
 
-### Generate city-specific plans
+# Generate city-specific plans
 
-### API Usage Monitoring
+# API Usage Monitoring
 
 
 ## Usage Notes
